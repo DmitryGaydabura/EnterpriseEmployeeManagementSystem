@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,7 +31,8 @@ import java.util.Set;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-    private final EmployeeConverter converter;
+    private final EmployeeMapper employeeMapper;
+
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,8 +45,8 @@ public class EmployeeController {
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
         log.debug("saveEmployee() - start: requestForSave = {}", requestForSave);
         //var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
-        var employee = converter.fromDto(requestForSave);
-        var dto = converter.toDto(employeeService.create(employee));
+        var employee = employeeMapper.fromDto(requestForSave);
+        var dto = employeeMapper.toDto(employeeService.create(employee));
         log.debug("saveEmployee() - stop: dto = {}", dto);
         return dto;
     }
@@ -85,7 +86,7 @@ public class EmployeeController {
         log.debug("getEmployeeById() EmployeeController - start: id = {}", id);
         var employee = employeeService.getById(id);
         log.debug("getById() EmployeeController - to dto start: id = {}", id);
-        var dto = converter.toReadDto(employee);
+        var dto = employeeMapper.toReadDto(employee);
         log.debug("getEmployeeById() EmployeeController - end: name = {}", dto.name);
         return dto;
     }

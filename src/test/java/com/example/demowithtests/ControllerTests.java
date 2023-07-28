@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -34,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,14 +50,13 @@ public class ControllerTests {
     EmployeeService service;
 
     @MockBean
-    EmployeeConverter employeeConverter;
+    EmployeeMapper employeeConverter;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     @DisplayName("POST /api/users")
-    @WithMockUser(roles = "ADMIN")
     public void createPassTest() throws Exception {
 
         var response = new EmployeeDto();
@@ -78,7 +75,6 @@ public class ControllerTests {
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/api/users")
-                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(employee));
 
@@ -92,7 +88,6 @@ public class ControllerTests {
 
     @Test
     @DisplayName("Entity POST /api/users")
-    @WithMockUser(roles = "ADMIN")
     public void testEntitySave() throws Exception {
 
         var employeeToBeReturn = Employee.builder()
@@ -118,7 +113,6 @@ public class ControllerTests {
 
     @Test
     @DisplayName("GET /api/users/{id}")
-    @WithMockUser(roles = "USER")
     public void getPassByIdTest() throws Exception {
 
         var response = new EmployeeReadDto();
@@ -145,7 +139,6 @@ public class ControllerTests {
 
     @Test
     @DisplayName("PUT /api/users/{id}")
-    @WithMockUser(roles = "ADMIN")
     public void updatePassByIdTest() throws Exception {
         //var response = new EmployeeDto();
         //response.id = 1;
@@ -169,7 +162,6 @@ public class ControllerTests {
 
     @Test
     @DisplayName("PATCH /api/users/{id}")
-    @WithMockUser(roles = "ADMIN")
     public void deletePassTest() throws Exception {
 
         doNothing().when(service).removeById(1);
@@ -185,7 +177,6 @@ public class ControllerTests {
 
     @Test
     @DisplayName("GET /api/users/p")
-    @WithMockUser(roles = "USER")
     public void getUsersPageTest() throws Exception {
 
         var employee1 = Employee.builder().id(1).name("John").country("US").build();
