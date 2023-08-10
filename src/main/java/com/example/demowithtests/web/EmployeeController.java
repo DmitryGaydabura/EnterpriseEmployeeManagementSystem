@@ -5,6 +5,7 @@ import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.EmployeeServiceEM;
+import com.example.demowithtests.util.annotations.LoggingExecutionTime;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,6 +44,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    @LoggingExecutionTime
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
         log.debug("saveEmployee() - start: requestForSave = {}", requestForSave.name());
         var employee = employeeMapper.toEmployee(requestForSave);
@@ -53,6 +55,7 @@ public class EmployeeController {
 
     @PostMapping("/users/jpa")
     @ResponseStatus(HttpStatus.CREATED)
+    @LoggingExecutionTime
     public Employee saveEmployee(@RequestBody Employee employee) {
         log.debug("saveEmployeeWithJpa() - start: employee = {}", employee);
         Employee saved = employeeServiceEM.createWithJpa(employee);
@@ -62,12 +65,14 @@ public class EmployeeController {
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public List<Employee> getAllUsers() {
         return employeeService.getAll();
     }
 
     @GetMapping("/users/pages")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public Page<EmployeeReadDto> getPage(
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         log.debug("getPage() - start: page= {}, size = {}", page, size);
@@ -86,6 +91,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    @LoggingExecutionTime
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
         log.debug("getEmployeeById() EmployeeController - start: id = {}", id);
         var employee = employeeService.getById(id);
@@ -97,6 +103,7 @@ public class EmployeeController {
 
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public EmployeeReadDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto employee) {
         log.debug("refreshEmployee() EmployeeController - start: id = {}", id);
         Employee entity = employeeMapper.toEmployee(employee);
@@ -107,18 +114,21 @@ public class EmployeeController {
 
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @LoggingExecutionTime
     public void removeEmployeeById(@PathVariable Integer id) {
         employeeService.removeById(id);
     }
 
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @LoggingExecutionTime
     public void removeAllUsers() {
         employeeService.removeAll();
     }
 
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
                                                @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "3") int size,
@@ -131,36 +141,42 @@ public class EmployeeController {
 
     @GetMapping("/users/c")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public List<String> getAllUsersC() {
         return employeeService.getAllEmployeeCountry();
     }
 
     @GetMapping("/users/s")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public List<String> getAllUsersSort() {
         return employeeService.getSortCountry();
     }
 
     @GetMapping("/users/emails")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public Optional<String> getAllUsersSo() {
         return employeeService.findEmails();
     }
 
     @GetMapping("/users/countryBy")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public List<Employee> getByCountry(@RequestParam(required = true) String country) {
         return employeeService.filterByCountry(country);
     }
 
     @PatchMapping("/users/ukrainians")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public Set<String> sendEmailsAllUkrainian() {
         return employeeService.sendEmailsAllUkrainian();
     }
 
     @GetMapping("/users/names")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public List<Employee> findByNameContaining(@RequestParam String employeeName) {
         log.debug("findByNameContaining() EmployeeController - start: employeeName = {}", employeeName);
         List<Employee> employees = employeeService.findByNameContaining(employeeName);

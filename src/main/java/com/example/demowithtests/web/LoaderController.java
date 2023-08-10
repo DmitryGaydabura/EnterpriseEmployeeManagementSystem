@@ -1,6 +1,7 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.service.fillDataBase.LoaderService;
+import com.example.demowithtests.util.annotations.LoggingExecutionTime;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoaderController {
 
     private final LoaderService loaderService;
-
+    @LoggingExecutionTime
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/users/fill")
     public String fillDataBase() {

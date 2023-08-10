@@ -2,6 +2,7 @@ package com.example.demowithtests.web.document;
 
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.service.document.DocumentService;
+import com.example.demowithtests.util.annotations.LoggingExecutionTime;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class DocumentController implements DocumentResource {
     @Override
     @PostMapping("/documents")
     @ResponseStatus(HttpStatus.CREATED)
+    @LoggingExecutionTime
     public Document createDocument(@RequestBody Document document) {
         return documentService.create(document);
     }
@@ -34,6 +36,7 @@ public class DocumentController implements DocumentResource {
     @Override
     @GetMapping("/documents/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @LoggingExecutionTime
     public Document getDocumentById(@PathVariable Integer id) {
         return documentService.getById(id);
     }
