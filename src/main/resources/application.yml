@@ -20,6 +20,9 @@ spring:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        generate_statistics: true
     #open-in-view: false
     #generate-ddl: true
   flyway:
