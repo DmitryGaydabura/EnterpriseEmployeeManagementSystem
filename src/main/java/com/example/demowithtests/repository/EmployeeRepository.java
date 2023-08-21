@@ -66,4 +66,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
     List<Employee> findAllByNameStartingWith(String prefix);
+
 }
