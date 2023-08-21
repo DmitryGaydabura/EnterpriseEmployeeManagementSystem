@@ -58,4 +58,12 @@ public interface EmployeeService {
 
     List<Employee> findByNameContaining(String name);
 
+    List<Employee> findAllFrench();
+
+    List<Employee> findAllFrenchGraph();
+
+    List<Employee> findAllMr();
+
+    List<Employee> findAllMrGraph();
+
 }

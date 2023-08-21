@@ -55,4 +55,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = "SELECT * FROM users WHERE country = 'Ukraine'", nativeQuery = true)
     Optional<List<Employee>> findAllUkrainian();
 
+    @Query(value = "SELECT * FROM users WHERE country = 'France'", nativeQuery = true)
+    List<Employee> findAllFrench();
+
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
+    List<Employee> findAllByCountry(String country);
+
+    @Query(value = "SELECT * FROM users WHERE name LIKE 'Mr.%';", nativeQuery = true)
+    List<Employee> findAllMr();
+
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
+    List<Employee> findAllByNameStartingWith(String prefix);
 }
